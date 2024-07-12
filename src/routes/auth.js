@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { hash } = require("bcrypt");
+const { hash, compare } = require("bcrypt");
 const User = require("./../../models/user");
 
 router.post("/signup", async (req, res) => {
@@ -34,6 +34,21 @@ router.post("/signup", async (req, res) => {
       error,
     });
   }
+});
+
+router.post("/signin", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email: email });
+
+  if (!user) {
+    return res.status(500).json({
+      messgae: "User Don't exist!",
+    });
+  }
+
+  const isMatch = await compare(password, user.password);
+  console.log("🚀 ~ router.post ~ isMatch:", isMatch);
 });
 
 module.exports = router;
