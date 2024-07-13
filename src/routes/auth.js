@@ -79,4 +79,15 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+router.post("/logout", async (req, res) => {
+  try {
+    res.clearCookie("refressToken");
+    res.status(200).json({ message: "Logout successfully!" });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
+
 module.exports = router;
